@@ -1,10 +1,8 @@
 package exceptions;
 
-import java.sql.SQLException;
-
 public class DatabaseConnectionException extends RuntimeException {
 
-    public DatabaseConnectionException(String message, SQLException sqle) {
+    public DatabaseConnectionException(String message, Throwable throwable) {
         super(message);
     }
 }
