@@ -1,5 +1,10 @@
 package panels;
 
+import panels.rooms.RoomPanel;
+import panels.bookings.dialogs.BookingsPanel;
+import services.BookingService;
+import services.RoomService;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -8,7 +13,7 @@ public class MainFrame extends JFrame {
     private JPanel contentPanel;
     private CardLayout cardLayout;
 
-    public MainFrame() {
+    public MainFrame(RoomService roomService, BookingService bookingService) {
         setTitle("Система просмотра и бронирования номеров");
         setSize(1500, 600);
         setLocationRelativeTo(null);
@@ -17,7 +22,7 @@ public class MainFrame extends JFrame {
 
         cardLayout = new CardLayout();
         contentPanel = new JPanel(cardLayout);
-        contentPanel.add(new RoomsPanel(), "Комнаты");
+        contentPanel.add(new RoomPanel(roomService), "Комнаты");
         contentPanel.add(new BookingsPanel(), "Бронирование");
         contentPanel.add(new ReportsPanel(), "Отчеты");
 

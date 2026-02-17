@@ -1,14 +1,14 @@
-package panels;
+package panels.bookings;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class BookingsPanel extends JPanel {
+public class BookingPanel extends JPanel {
 
     private JTable table;
     private JPanel topButtonPanel;
 
-    public BookingsPanel() {
+    public BookingPanel() {
         setLayout(new BorderLayout());
 
         topButtonPanel = new JPanel();

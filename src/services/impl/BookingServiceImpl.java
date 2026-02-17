@@ -3,16 +3,16 @@ package services.impl;
 import enums.BookingStatus;
 import models.Booking;
 import repositories.BookingsRepository;
-import services.BookingsService;
+import services.BookingService;
 
 import java.time.LocalDate;
 import java.util.List;
 
-public class BookingsServiceImpl implements BookingsService {
+public class BookingServiceImpl implements BookingService {
 
     private final BookingsRepository bookingsRepository;
 
-    public BookingsServiceImpl(BookingsRepository bookingsRepository) {
+    public BookingServiceImpl(BookingsRepository bookingsRepository) {
         this.bookingsRepository = bookingsRepository;
     }
 

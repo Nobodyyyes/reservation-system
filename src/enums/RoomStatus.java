@@ -1,7 +1,18 @@
 package enums;
 
 public enum RoomStatus {
-    AVAILABLE,
-    MAINTENANCE,
-    OCCUPIED
+    AVAILABLE("Доступно"),
+    MAINTENANCE("Обслуживание"),
+    OCCUPIED("Занято");
+
+    private final String description;
+
+    RoomStatus(String description) {
+        this.description = description;
+    }
+
+    @Override
+    public String toString() {
+        return description;
+    }
 }

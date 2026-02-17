@@ -1,12 +1,10 @@
 package services.impl;
 
 import enums.RoomStatus;
-import enums.RoomType;
 import models.Room;
 import repositories.RoomRepository;
 import services.RoomService;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 public class RoomServiceImpl implements RoomService {
@@ -18,13 +16,13 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public Room create(String number, RoomType roomType, double price) {
+    public Room create(Room newRoom) {
         Room room = new Room();
-        room.setNumber(number);
-        room.setRoomType(roomType);
-        room.setRoomStatus(RoomStatus.AVAILABLE);
-        room.setPrice(price);
-        room.setCreatedAt(LocalDateTime.now());
+        room.setNumber(newRoom.getNumber());
+        room.setRoomType(newRoom.getRoomType());
+        room.setRoomStatus(newRoom.getRoomStatus());
+        room.setPrice(newRoom.getPrice());
+        room.setCreatedAt(newRoom.getCreatedAt());
 
         return roomRepository.save(room);
     }

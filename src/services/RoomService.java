@@ -1,14 +1,13 @@
 package services;
 
 import enums.RoomStatus;
-import enums.RoomType;
 import models.Room;
 
 import java.util.List;
 
 public interface RoomService {
 
-    Room create(String number, RoomType roomType, double price);
+    Room create(Room newRoom);
 
     List<Room> getAllRooms();
 

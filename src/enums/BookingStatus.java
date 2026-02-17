@@ -1,7 +1,18 @@
 package enums;
 
 public enum BookingStatus {
-    ACTIVE,
-    CANCELLED,
-    COMPLETED
+    ACTIVE("Активный "),
+    CANCELLED("Отмененный"),
+    COMPLETED("Забронированный");
+
+    private final String description;
+
+    BookingStatus(String description) {
+        this.description = description;
+    }
+
+    @Override
+    public String toString() {
+        return description;
+    }
 }

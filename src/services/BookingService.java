@@ -5,7 +5,7 @@ import models.Booking;
 import java.time.LocalDate;
 import java.util.List;
 
-public interface BookingsService {
+public interface BookingService {
 
     Booking create(Booking booking);
 
