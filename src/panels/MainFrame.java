@@ -1,7 +1,7 @@
 package panels;
 
+import panels.bookings.BookingPanel;
 import panels.rooms.RoomPanel;
-import panels.bookings.dialogs.BookingsPanel;
 import services.BookingService;
 import services.RoomService;
 
@@ -23,7 +23,7 @@ public class MainFrame extends JFrame {
         cardLayout = new CardLayout();
         contentPanel = new JPanel(cardLayout);
         contentPanel.add(new RoomPanel(roomService), "Комнаты");
-        contentPanel.add(new BookingsPanel(), "Бронирование");
+        contentPanel.add(new BookingPanel(), "Бронирование");
         contentPanel.add(new ReportsPanel(), "Отчеты");
 
         add(buildSidebar(), BorderLayout.WEST);

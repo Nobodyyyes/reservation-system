@@ -16,6 +16,8 @@ public class RoomPanel extends JPanel {
     private final RoomService roomService;
     private final JTextField searchField;
 
+    private List<Room> cachedRooms = List.of();
+
     public RoomPanel(RoomService roomService) {
         this.roomService = roomService;
 
@@ -94,25 +96,28 @@ public class RoomPanel extends JPanel {
 
     public void loadRooms() {
         try {
-            List<Room> rooms = roomService.getAllRooms();
-            tableModel.setRowCount(0);
-
-            for (Room room : rooms) {
-                tableModel.addRow(new Object[]{
-                        room.getId(),
-                        room.getNumber(),
-                        room.getRoomType(),
-                        room.getRoomStatus(),
-                        room.getPrice(),
-                        room.getCreatedAt(),
-                        ""
-                });
-            }
+            cachedRooms = roomService.getAllRooms();
+            renderRooms(cachedRooms);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this,
                     "Ошибка загрузки комнат: " + e.getMessage(),
                     "Error",
                     JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void renderRooms(List<Room> rooms) {
+        tableModel.setRowCount(0);
+        for (Room room : rooms) {
+            tableModel.addRow(new Object[]{
+                    room.getId(),
+                    room.getNumber(),
+                    room.getRoomType(),
+                    room.getRoomStatus(),
+                    room.getPrice(),
+                    room.getCreatedAt(),
+                    ""
+            });
         }
     }
 
@@ -129,6 +134,19 @@ public class RoomPanel extends JPanel {
     }
 
     private void searchRoom() {
+        String enteredText = searchField.getText();
 
+        if (enteredText == null || enteredText.isBlank()) {
+            renderRooms(cachedRooms);
+            return;
+        }
+
+        String needle = enteredText.trim().toLowerCase();
+
+        List<Room> filtered = cachedRooms.stream()
+                .filter(r -> r.getNumber() != null && r.getNumber().toLowerCase().contains(needle))
+                .toList();
+
+        renderRooms(filtered);
     }
 }
