@@ -21,7 +21,7 @@ public class CreateRoomDialog extends JDialog {
     private JTextField priceField;
 
     public CreateRoomDialog(Frame parent, RoomService roomService) {
-        super(parent, "Создание задачи", true);
+        super(parent, "Создание комнаты", true);
         this.roomService = roomService;
 
         setSize(400, 300);
@@ -86,7 +86,7 @@ public class CreateRoomDialog extends JDialog {
 
             createdRoom = roomService.create(newRoom);
 
-            JOptionPane.showMessageDialog(this, "Задача создана!");
+            JOptionPane.showMessageDialog(this, "Комната создана!");
             dispose();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Ошибка создания комнаты: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);

@@ -15,7 +15,7 @@ public class DeleteRoomDialog extends JDialog {
         setLayout(new BorderLayout(10, 10));
 
         JLabel message = new JLabel(
-                "Вы действительно хотите удалить задачу: %s".formatted(roomNumber),
+                "Вы действительно хотите удалить комнату: %s".formatted(roomNumber),
                 SwingConstants.CENTER
         );
 

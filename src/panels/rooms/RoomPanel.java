@@ -1,5 +1,7 @@
 package panels.rooms;
 
+import enums.RoomStatus;
+import enums.RoomType;
 import models.Room;
 import panels.rooms.dialogs.CreateRoomDialog;
 import services.RoomService;
@@ -17,6 +19,8 @@ public class RoomPanel extends JPanel {
     private final JTextField searchField;
 
     private List<Room> cachedRooms = List.of();
+    private JComboBox<RoomType> roomTypeCombo;
+    private JComboBox<RoomStatus> roomStatusCombo;
 
     public RoomPanel(RoomService roomService) {
         this.roomService = roomService;
@@ -45,10 +49,16 @@ public class RoomPanel extends JPanel {
         tableSettings(table);
         centerSpecificationColumns(table);
 
-        searchField = new JTextField(100);
+        searchField = new JTextField(15);
+        optimizeSearch(searchField);
+
+        roomTypeCombo = new JComboBox<>();
+        roomTypeCombo = roomTypeSettings();
+
+        roomStatusCombo = new JComboBox<>();
+        roomStatusCombo = roomStatusSettings();
 
         JButton btnCreate = new JButton("Создать");
-        JButton btnSearch = new JButton("Поиск");
 
         JPanel topPanel = new JPanel(new BorderLayout());
 
@@ -56,9 +66,11 @@ public class RoomPanel extends JPanel {
         leftTopPanel.add(btnCreate);
 
         JPanel rightTopPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        rightTopPanel.add(new JLabel("Название: "));
-        rightTopPanel.add(searchField);
-        rightTopPanel.add(btnSearch);
+        rightTopPanelSettings(rightTopPanel);
+
+        JButton btnReset = new JButton("Сброс");
+        btnReset.addActionListener(e -> resetButton());
+        rightTopPanel.add(btnReset);
 
         topPanel.add(leftTopPanel, BorderLayout.WEST);
         topPanel.add(rightTopPanel, BorderLayout.EAST);
@@ -69,7 +81,8 @@ public class RoomPanel extends JPanel {
         loadRooms();
 
         btnCreate.addActionListener(e -> createRoom());
-        btnSearch.addActionListener(e -> searchRoom());
+        roomTypeCombo.addActionListener(e -> searchRoom());
+        roomStatusCombo.addActionListener(e -> searchRoom());
     }
 
     private void tableSettings(JTable table) {
@@ -94,10 +107,80 @@ public class RoomPanel extends JPanel {
         table.getColumn("Дата создания").setCellRenderer(centerRenderer);
     }
 
+    private void optimizeSearch(JTextField searchField) {
+        searchField.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
+            @Override
+            public void insertUpdate(javax.swing.event.DocumentEvent e) {
+                searchRoom();
+            }
+
+            @Override
+            public void removeUpdate(javax.swing.event.DocumentEvent e) {
+                searchRoom();
+            }
+
+            @Override
+            public void changedUpdate(javax.swing.event.DocumentEvent e) {
+                searchRoom();
+            }
+        });
+    }
+
+    private JComboBox<RoomType> roomTypeSettings() {
+        roomTypeCombo.addItem(null);
+        for (RoomType t : RoomType.values()) roomTypeCombo.addItem(t);
+
+        roomTypeCombo.setRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                setText(value == null ? "Все типы" : value.toString());
+                return this;
+            }
+        });
+
+        return roomTypeCombo;
+    }
+
+    private JComboBox<RoomStatus> roomStatusSettings() {
+        roomStatusCombo.addItem(null);
+        for (RoomStatus t : RoomStatus.values()) roomStatusCombo.addItem(t);
+
+        roomStatusCombo.setRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                setText(value == null ? "Все статусы" : value.toString());
+                return this;
+            }
+        });
+
+        return roomStatusCombo;
+    }
+
+    private void rightTopPanelSettings(JPanel rightTopPanel) {
+        rightTopPanel.add(new JLabel("Тип: "));
+        rightTopPanel.add(roomTypeCombo);
+
+        rightTopPanel.add(new JLabel("Статус: "));
+        rightTopPanel.add(roomStatusCombo);
+
+        rightTopPanel.add(new JLabel("Номер комнаты: "));
+        rightTopPanel.add(searchField);
+    }
+
+    private void resetButton() {
+        searchField.setText("");
+        roomTypeCombo.setSelectedItem(null);
+        roomStatusCombo.setSelectedItem(null);
+        renderRooms(cachedRooms);
+    }
+
     public void loadRooms() {
         try {
             cachedRooms = roomService.getAllRooms();
             renderRooms(cachedRooms);
+            searchRoom();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this,
                     "Ошибка загрузки комнат: " + e.getMessage(),
@@ -134,17 +217,25 @@ public class RoomPanel extends JPanel {
     }
 
     private void searchRoom() {
-        String enteredText = searchField.getText();
+        String q = searchField.getText();
+        String needle = (q == null) ? "" : q.trim().toLowerCase();
 
-        if (enteredText == null || enteredText.isBlank()) {
-            renderRooms(cachedRooms);
-            return;
-        }
-
-        String needle = enteredText.trim().toLowerCase();
+        RoomType selectedType = (RoomType) roomTypeCombo.getSelectedItem();
+        RoomStatus selectedStatus = (RoomStatus) roomStatusCombo.getSelectedItem();
 
         List<Room> filtered = cachedRooms.stream()
-                .filter(r -> r.getNumber() != null && r.getNumber().toLowerCase().contains(needle))
+                .filter(r -> {
+                    boolean okNumber = needle.isEmpty()
+                            || (r.getNumber() != null && r.getNumber().toLowerCase().contains(needle));
+
+                    boolean okType = selectedType == null
+                            || (r.getRoomType() == selectedType);
+
+                    boolean okStatus = selectedStatus == null
+                            || (r.getRoomStatus() == selectedStatus);
+
+                    return okNumber && okType && okStatus;
+                })
                 .toList();
 
         renderRooms(filtered);
