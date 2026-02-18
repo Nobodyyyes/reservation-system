@@ -85,7 +85,7 @@ public class BookingActionButtonEditor extends DefaultCellEditor {
         dialog.setVisible(true);
 
         if (dialog.isConfirmed()) {
-            bookingService.delete(currentBooking.getId());
+            bookingService.cancel(currentBooking.getId());
             bookingPanel.loadBookings();
         }
 

@@ -60,9 +60,28 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public boolean delete(Long id) {
-        return bookingRepository.delete(id);
+    public boolean cancel(Long id) {
+        Booking booking = findById(id);
+
+        boolean deleted = bookingRepository.delete(id);
+
+        if (deleted) {
+            refreshRoomOccupiedStatus(booking.getRoomId());
+        }
+
+        return deleted;
     }
+
+    private void refreshRoomOccupiedStatus(Long roomId) {
+        boolean hasActive = bookingRepository.findByRoomId(roomId)
+                .stream()
+                .anyMatch(b -> b.getBookingStatus() == BookingStatus.ACTIVE);
+
+        if (!hasActive) {
+            roomService.updateStatus(roomId, RoomStatus.AVAILABLE);
+        }
+    }
+
 
     @Override
     public Booking findById(Long id) {
