@@ -48,6 +48,7 @@ public class EditRoomDialog extends JDialog {
 
     private void fieldsBuild() {
         roomNumberField = new JTextField(room.getNumber());
+        roomNumberField.setEditable(false);
 
         roomTypeCombo = new JComboBox<>(RoomType.values());
         roomTypeCombo.setSelectedItem(room.getRoomType());

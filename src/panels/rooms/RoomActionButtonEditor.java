@@ -16,9 +16,7 @@ public class RoomActionButtonEditor extends DefaultCellEditor {
     private final RoomPanel roomPanel;
     private Room currentRoom;
 
-    public RoomActionButtonEditor(JTable table,
-                                  RoomService roomService,
-                                  RoomPanel roomPanel) {
+    public RoomActionButtonEditor(JTable table, RoomService roomService, RoomPanel roomPanel) {
         super(new JCheckBox());
         this.table = table;
         this.roomService = roomService;
@@ -31,8 +29,8 @@ public class RoomActionButtonEditor extends DefaultCellEditor {
         panel.add(btnEdit);
         panel.add(btnDelete);
 
-        btnEdit.addActionListener(e -> updateHabit());
-        btnDelete.addActionListener(e -> deleteHabit());
+        btnEdit.addActionListener(e -> updateRoom());
+        btnDelete.addActionListener(e -> deleteRoom());
     }
 
     @Override
@@ -45,7 +43,7 @@ public class RoomActionButtonEditor extends DefaultCellEditor {
         return panel;
     }
 
-    private void updateHabit() {
+    private void updateRoom() {
         if (currentRoom == null) {
             JOptionPane.showMessageDialog(table,
                     "Не удалось определить комнату для редактирования",
@@ -69,7 +67,7 @@ public class RoomActionButtonEditor extends DefaultCellEditor {
         fireEditingStopped();
     }
 
-    private void deleteHabit() {
+    private void deleteRoom() {
         if (currentRoom == null) {
             JOptionPane.showMessageDialog(table,
                     "Не удалось определить комнату для удаления",

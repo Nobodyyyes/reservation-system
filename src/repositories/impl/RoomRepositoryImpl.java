@@ -63,6 +63,25 @@ public class RoomRepositoryImpl implements RoomRepository {
     }
 
     @Override
+    public boolean existsByNumber(String number) {
+        String sql = "SELECT COUNT(*) FROM rooms WHERE number = ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, number);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return false;
+    }
+
+    @Override
     public Room findById(Long roomId) {
         String sql = "SELECT * FROM rooms WHERE id=?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -75,6 +94,18 @@ public class RoomRepositoryImpl implements RoomRepository {
             throw new RuntimeException(e);
         }
         return null;
+    }
+
+    @Override
+    public Room findByNumberExact(String number) {
+        String sql = "SELECT * FROM rooms WHERE number = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, number);
+            ResultSet rs = ps.executeQuery();
+            return rs.next() ? mapRow(rs) : null;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

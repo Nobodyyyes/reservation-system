@@ -23,7 +23,7 @@ public class MainFrame extends JFrame {
         cardLayout = new CardLayout();
         contentPanel = new JPanel(cardLayout);
         contentPanel.add(new RoomPanel(roomService), "Комнаты");
-        contentPanel.add(new BookingPanel(), "Бронирование");
+        contentPanel.add(new BookingPanel(bookingService, roomService), "Бронирование");
         contentPanel.add(new ReportsPanel(), "Отчеты");
 
         add(buildSidebar(), BorderLayout.WEST);

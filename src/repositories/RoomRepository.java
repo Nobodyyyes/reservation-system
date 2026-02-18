@@ -13,7 +13,11 @@ public interface RoomRepository {
 
     boolean delete(Long id);
 
+    boolean existsByNumber(String number);
+
     Room findById(Long roomId);
+
+    Room findByNumberExact(String number);
 
     List<Room> findAll();
 

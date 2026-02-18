@@ -2,17 +2,17 @@ package repositories.impl;
 
 import enums.BookingStatus;
 import models.Booking;
-import repositories.BookingsRepository;
+import repositories.BookingRepository;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BookingsRepositoryImpl implements BookingsRepository {
+public class BookingRepositoryImpl implements BookingRepository {
 
     private final Connection connection;
 
-    public BookingsRepositoryImpl(Connection connection) {
+    public BookingRepositoryImpl(Connection connection) {
         this.connection = connection;
     }
 
@@ -117,6 +117,7 @@ public class BookingsRepositoryImpl implements BookingsRepository {
         Booking booking = new Booking();
         booking.setId(rs.getLong("id"));
         booking.setRoomId(rs.getLong("room_id"));
+        booking.setRoomNumber(rs.getString("room_number"));
         booking.setClientName(rs.getString("client_name"));
         booking.setClientMsisdn(rs.getString("client_msisdn"));
         booking.setStartDate(rs.getDate("start_date").toLocalDate());

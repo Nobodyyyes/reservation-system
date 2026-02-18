@@ -1,9 +1,9 @@
 package enums;
 
 public enum BookingStatus {
-    ACTIVE("Активный "),
-    CANCELLED("Отмененный"),
-    COMPLETED("Забронированный");
+    ACTIVE("Свободнен"),
+    CANCELLED("Отмененен"),
+    COMPLETED("Забронирован");
 
     private final String description;
 

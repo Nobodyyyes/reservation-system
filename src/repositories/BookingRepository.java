@@ -4,7 +4,7 @@ import models.Booking;
 
 import java.util.List;
 
-public interface BookingsRepository {
+public interface BookingRepository {
 
     Booking save(Booking booking);
 

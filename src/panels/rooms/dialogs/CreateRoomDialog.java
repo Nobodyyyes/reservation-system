@@ -28,7 +28,7 @@ public class CreateRoomDialog extends JDialog {
         setLocationRelativeTo(parent);
         setLayout(new BorderLayout());
 
-        JPanel panel = new JPanel(new GridLayout(4, 2, 10, 10));
+        JPanel panel = new JPanel(new GridLayout(3, 2, 10, 10));
 
         fieldsBuild();
         populatePanel(panel);
@@ -50,9 +50,6 @@ public class CreateRoomDialog extends JDialog {
         roomTypeCombo = new JComboBox<>(RoomType.values());
         roomTypeCombo.setSelectedItem(RoomType.STANDARD);
 
-        roomStatusCombo = new JComboBox<>(RoomStatus.values());
-        roomStatusCombo.setSelectedItem(RoomStatus.AVAILABLE);
-
         priceField = new JTextField();
     }
 
@@ -63,9 +60,6 @@ public class CreateRoomDialog extends JDialog {
         panel.add(new JLabel("Тип:"));
         panel.add(roomTypeCombo);
 
-        panel.add(new JLabel("Статус:"));
-        panel.add(roomStatusCombo);
-
         panel.add(new JLabel("Цена:"));
         panel.add(priceField);
     }
@@ -73,14 +67,13 @@ public class CreateRoomDialog extends JDialog {
     private void createRoom() {
         String roomNumber = roomNumberField.getText().trim();
         RoomType roomType = (RoomType) roomTypeCombo.getSelectedItem();
-        RoomStatus roomStatus = (RoomStatus) roomStatusCombo.getSelectedItem();
         Double roomPrice = Double.valueOf(priceField.getText().trim());
 
         try {
             Room newRoom = new Room();
             newRoom.setNumber(roomNumber);
             newRoom.setRoomType(roomType);
-            newRoom.setRoomStatus(roomStatus);
+            newRoom.setRoomStatus(RoomStatus.AVAILABLE);
             newRoom.setPrice(roomPrice);
             newRoom.setCreatedAt(LocalDateTime.now());
 

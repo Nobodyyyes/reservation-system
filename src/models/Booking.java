@@ -9,6 +9,7 @@ public class Booking {
 
     private Long id;
     private Long roomId;
+    private String roomNumber;
     private String clientName;
     private String clientMsisdn;
     private LocalDate startDate;
@@ -19,9 +20,18 @@ public class Booking {
     public Booking() {
     }
 
-    public Booking(Long id, Long roomId, String clientName, String clientMsisdn, LocalDate startDate, LocalDate endDate, BookingStatus bookingStatus, LocalDateTime createdAt) {
+    public Booking(Long id,
+                   Long roomId,
+                   String roomNumber,
+                   String clientName,
+                   String clientMsisdn,
+                   LocalDate startDate,
+                   LocalDate endDate,
+                   BookingStatus bookingStatus,
+                   LocalDateTime createdAt) {
         this.id = id;
         this.roomId = roomId;
+        this.roomNumber = roomNumber;
         this.clientName = clientName;
         this.clientMsisdn = clientMsisdn;
         this.startDate = startDate;
@@ -92,5 +102,13 @@ public class Booking {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public String getRoomNumber() {
+        return roomNumber;
+    }
+
+    public void setRoomNumber(String roomNumber) {
+        this.roomNumber = roomNumber;
     }
 }

@@ -17,6 +17,15 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public Room create(Room newRoom) {
+
+        if (newRoom.getNumber() == null || newRoom.getNumber().isBlank()) {
+            throw new IllegalArgumentException("Номер комнаты не может быть пустым");
+        }
+
+        if (roomRepository.existsByNumber(newRoom.getNumber().trim())) {
+            throw new RuntimeException("Комната с номером [%s] уже существует".formatted(newRoom.getNumber()));
+        }
+
         Room room = new Room();
         room.setNumber(newRoom.getNumber());
         room.setRoomType(newRoom.getRoomType());
@@ -40,6 +49,19 @@ public class RoomServiceImpl implements RoomService {
             throw new RuntimeException("Room with ID [%s] not found".formatted(id));
         }
 
+        return room;
+    }
+
+    @Override
+    public Room getByNumber(String number) {
+        if (number == null || number.isBlank()) {
+            throw new IllegalArgumentException("Number is null");
+        }
+
+        Room room = roomRepository.findByNumberExact(number.trim());
+        if (room == null) {
+            throw new RuntimeException("Room by number [%s] not found".formatted(number));
+        }
         return room;
     }
 

@@ -2,27 +2,48 @@ package services.impl;
 
 import enums.BookingStatus;
 import models.Booking;
-import repositories.BookingsRepository;
+import models.Room;
+import repositories.BookingRepository;
 import services.BookingService;
+import services.RoomService;
 
 import java.time.LocalDate;
 import java.util.List;
 
 public class BookingServiceImpl implements BookingService {
 
-    private final BookingsRepository bookingsRepository;
+    private final BookingRepository bookingRepository;
+    private final RoomService roomService;
 
-    public BookingServiceImpl(BookingsRepository bookingsRepository) {
-        this.bookingsRepository = bookingsRepository;
+    public BookingServiceImpl(BookingRepository bookingRepository, RoomService roomService) {
+        this.bookingRepository = bookingRepository;
+        this.roomService = roomService;
     }
 
     @Override
     public Booking create(Booking booking) {
-        if (!isRoomAvailable(booking.getRoomId(), booking.getStartDate(), booking.getEndDate())) {
-            throw new RuntimeException("Room is not available for the selected dates");
+        if (booking.getRoomId() == null) {
+            Room room = roomService.getByNumber(booking.getRoomNumber());
+            booking.setRoomId(room.getId());
+            booking.setRoomNumber(room.getNumber());
         }
-        booking.setBookingStatus(BookingStatus.ACTIVE);
-        return bookingsRepository.save(booking);
+
+        if (booking.getStartDate() == null || booking.getEndDate() == null) {
+            throw new IllegalArgumentException("Даты бронирования не заданы");
+        }
+        if (booking.getEndDate().isBefore(booking.getStartDate())) {
+            throw new IllegalArgumentException("Дата окончания меньше даты начала");
+        }
+
+        if (!isRoomAvailable(booking.getRoomId(), booking.getStartDate(), booking.getEndDate())) {
+            throw new RuntimeException("Комната занята на выбранные даты");
+        }
+
+        if (booking.getBookingStatus() == null) {
+            booking.setBookingStatus(BookingStatus.ACTIVE);
+        }
+
+        return bookingRepository.save(booking);
     }
 
     @Override
@@ -30,17 +51,17 @@ public class BookingServiceImpl implements BookingService {
         if (!isRoomAvailableForUpdate(booking)) {
             throw new RuntimeException("Room is not available for the selected dates");
         }
-        return bookingsRepository.update(booking);
+        return bookingRepository.update(booking);
     }
 
     @Override
     public boolean delete(Long id) {
-        return bookingsRepository.delete(id);
+        return bookingRepository.delete(id);
     }
 
     @Override
     public Booking findById(Long id) {
-        Booking booking = bookingsRepository.findById(id);
+        Booking booking = bookingRepository.findById(id);
 
         if (booking == null) {
             throw new RuntimeException("Booking by ID [%s] not found".formatted(id));
@@ -51,12 +72,12 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public List<Booking> getAll() {
-        return bookingsRepository.findAll();
+        return bookingRepository.findAll();
     }
 
     @Override
     public boolean isRoomAvailable(Long roomId, LocalDate start, LocalDate end) {
-        List<Booking> bookings = bookingsRepository.findByRoomId(roomId);
+        List<Booking> bookings = bookingRepository.findByRoomId(roomId);
         for (Booking b : bookings) {
             if (!(end.isBefore(b.getStartDate()) || start.isAfter(b.getEndDate()))) {
                 return false;
@@ -66,7 +87,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     private boolean isRoomAvailableForUpdate(Booking booking) {
-        List<Booking> bookings = bookingsRepository.findByRoomId(booking.getRoomId());
+        List<Booking> bookings = bookingRepository.findByRoomId(booking.getRoomId());
         for (Booking b : bookings) {
             if (b.getId().equals(booking.getId())) continue;
             if (!(booking.getEndDate().isBefore(b.getStartDate()) || booking.getStartDate().isAfter(b.getEndDate()))) {

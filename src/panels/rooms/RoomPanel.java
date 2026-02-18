@@ -10,9 +10,13 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class RoomPanel extends JPanel {
+
+    private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
 
     private final DefaultTableModel tableModel;
     private final RoomService roomService;
@@ -58,7 +62,7 @@ public class RoomPanel extends JPanel {
         roomStatusCombo = new JComboBox<>();
         roomStatusCombo = roomStatusSettings();
 
-        JButton btnCreate = new JButton("Создать");
+        JButton btnCreate = new JButton("Создать комнату");
 
         JPanel topPanel = new JPanel(new BorderLayout());
 
@@ -198,10 +202,15 @@ public class RoomPanel extends JPanel {
                     room.getRoomType(),
                     room.getRoomStatus(),
                     room.getPrice(),
-                    room.getCreatedAt(),
+                    formatDate(room.getCreatedAt()),
                     ""
             });
         }
+    }
+
+    private String formatDate(LocalDateTime dateTime) {
+        if (dateTime == null) return "";
+        return dateTime.format(DATE_FORMAT);
     }
 
     private void createRoom() {

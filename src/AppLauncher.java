@@ -1,8 +1,8 @@
 import configurations.DatabaseConnectionConfiguration;
 import panels.MainFrame;
-import repositories.BookingsRepository;
+import repositories.BookingRepository;
 import repositories.RoomRepository;
-import repositories.impl.BookingsRepositoryImpl;
+import repositories.impl.BookingRepositoryImpl;
 import repositories.impl.RoomRepositoryImpl;
 import services.BookingService;
 import services.RoomService;
@@ -21,8 +21,8 @@ public class AppLauncher {
             RoomRepository roomRepository = new RoomRepositoryImpl(connection);
             RoomService roomService = new RoomServiceImpl(roomRepository);
 
-            BookingsRepository bookingsRepository = new BookingsRepositoryImpl(connection);
-            BookingService bookingService = new BookingServiceImpl(bookingsRepository);
+            BookingRepository bookingRepository = new BookingRepositoryImpl(connection);
+            BookingService bookingService = new BookingServiceImpl(bookingRepository, roomService);
 
             MainFrame mainFrame = new MainFrame(roomService, bookingService);
             mainFrame.setVisible(true);

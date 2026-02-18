@@ -13,6 +13,8 @@ public interface RoomService {
 
     Room getRoomById(Long id);
 
+    Room getByNumber(String number);
+
     Room updateRoom(Room room);
 
     List<Room> getRoomsByStatus(RoomStatus status);
