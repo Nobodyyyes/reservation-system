@@ -2,7 +2,7 @@ package enums;
 
 public enum RoomStatus {
     AVAILABLE("Доступно"),
-    MAINTENANCE("Занято");
+    OCCUPIED("Занято");
 
     private final String description;
 

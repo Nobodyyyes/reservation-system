@@ -9,9 +9,13 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class BookingPanel extends JPanel {
+
+    private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
 
     private final DefaultTableModel tableModel;
     private final BookingService bookingService;
@@ -118,10 +122,15 @@ public class BookingPanel extends JPanel {
                     booking.getStartDate(),
                     booking.getEndDate(),
                     booking.getBookingStatus(),
-                    booking.getCreatedAt(),
+                    formatDate(booking.getCreatedAt()),
                     ""
             });
         }
+    }
+
+    private String formatDate(LocalDateTime dateTime) {
+        if (dateTime == null) return "";
+        return dateTime.format(DATE_FORMAT);
     }
 
     private void createBooking() {

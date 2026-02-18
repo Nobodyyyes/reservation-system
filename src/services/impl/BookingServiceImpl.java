@@ -1,6 +1,7 @@
 package services.impl;
 
 import enums.BookingStatus;
+import enums.RoomStatus;
 import models.Booking;
 import models.Room;
 import repositories.BookingRepository;
@@ -43,7 +44,11 @@ public class BookingServiceImpl implements BookingService {
             booking.setBookingStatus(BookingStatus.ACTIVE);
         }
 
-        return bookingRepository.save(booking);
+        Booking saved = bookingRepository.save(booking);
+
+        roomService.updateStatus(saved.getRoomId(), RoomStatus.OCCUPIED);
+
+        return saved;
     }
 
     @Override
@@ -76,12 +81,24 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
+    public List<Room> getAvailableRooms(LocalDate start, LocalDate end) {
+        List<Room> allRooms = roomService.getAllRooms();
+
+        return allRooms.stream()
+                .filter(r -> r.getRoomStatus() != RoomStatus.OCCUPIED)
+                .filter(r -> isRoomAvailable(r.getId(), start, end))
+                .toList();
+    }
+
+    @Override
     public boolean isRoomAvailable(Long roomId, LocalDate start, LocalDate end) {
         List<Booking> bookings = bookingRepository.findByRoomId(roomId);
+
         for (Booking b : bookings) {
-            if (!(end.isBefore(b.getStartDate()) || start.isAfter(b.getEndDate()))) {
-                return false;
-            }
+            if (b.getBookingStatus() != BookingStatus.ACTIVE) continue;
+
+            boolean overlaps = !(end.isBefore(b.getStartDate()) || start.isAfter(b.getEndDate()));
+            if (overlaps) return false;
         }
         return true;
     }

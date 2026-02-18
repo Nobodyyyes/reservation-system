@@ -63,11 +63,13 @@ public class RoomPanel extends JPanel {
         roomStatusCombo = roomStatusSettings();
 
         JButton btnCreate = new JButton("Создать комнату");
+        JButton btnRefresh = new JButton("Обновить список");
 
         JPanel topPanel = new JPanel(new BorderLayout());
 
         JPanel leftTopPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         leftTopPanel.add(btnCreate);
+        leftTopPanel.add(btnRefresh);
 
         JPanel rightTopPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         rightTopPanelSettings(rightTopPanel);
@@ -85,6 +87,7 @@ public class RoomPanel extends JPanel {
         loadRooms();
 
         btnCreate.addActionListener(e -> createRoom());
+        btnRefresh.addActionListener(e -> loadRooms());
         roomTypeCombo.addActionListener(e -> searchRoom());
         roomStatusCombo.addActionListener(e -> searchRoom());
     }

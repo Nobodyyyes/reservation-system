@@ -80,6 +80,11 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
+    public void updateStatus(Long roomId, RoomStatus status) {
+        roomRepository.updateStatus(roomId, status);
+    }
+
+    @Override
     public boolean deleteRoom(Long roomId) {
         Room existing = roomRepository.findById(roomId);
         if (existing == null) {

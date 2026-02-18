@@ -22,4 +22,6 @@ public interface RoomRepository {
     List<Room> findAll();
 
     List<Room> findByStatus(RoomStatus roomStatus);
+
+    void updateStatus(Long roomId, RoomStatus status);
 }

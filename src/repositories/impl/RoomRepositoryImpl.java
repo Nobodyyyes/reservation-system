@@ -139,6 +139,18 @@ public class RoomRepositoryImpl implements RoomRepository {
         return rooms;
     }
 
+    @Override
+    public void updateStatus(Long roomId, RoomStatus status) {
+        String sql = "UPDATE rooms SET room_status = ? WHERE id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, status.name());
+            ps.setLong(2, roomId);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     private Room mapRow(ResultSet rs) throws SQLException {
         Room room = new Room();
         room.setId(rs.getLong("id"));

@@ -19,5 +19,7 @@ public interface RoomService {
 
     List<Room> getRoomsByStatus(RoomStatus status);
 
+    void updateStatus(Long roomId, RoomStatus status);
+
     boolean deleteRoom(Long roomId);
 }
