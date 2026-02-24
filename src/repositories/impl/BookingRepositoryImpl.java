@@ -18,8 +18,8 @@ public class BookingRepositoryImpl implements BookingRepository {
 
     @Override
     public Booking save(Booking booking) {
-        String sql = "INSERT INTO bookings (room_id, client_name, client_msisdn, start_date, end_date, booking_status, room_number) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING id, created_at";
+        String sql = "INSERT INTO bookings (room_id, client_name, client_msisdn, start_date, end_date, booking_status, room_number, client_passport_id) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?) RETURNING id, created_at";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setLong(1, booking.getRoomId());
             ps.setString(2, booking.getClientName());
@@ -28,6 +28,7 @@ public class BookingRepositoryImpl implements BookingRepository {
             ps.setDate(5, Date.valueOf(booking.getEndDate()));
             ps.setString(6, booking.getBookingStatus().name());
             ps.setString(7, booking.getRoomNumber());
+            ps.setString(8, booking.getClientPassportId());
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 booking.setId(rs.getLong("id"));
@@ -125,6 +126,7 @@ public class BookingRepositoryImpl implements BookingRepository {
         booking.setEndDate(rs.getDate("end_date").toLocalDate());
         booking.setBookingStatus(BookingStatus.valueOf(rs.getString("booking_status")));
         booking.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
+        booking.setClientPassportId(rs.getString("client_passport_id"));
         return booking;
     }
 }

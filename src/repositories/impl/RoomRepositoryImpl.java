@@ -1,5 +1,6 @@
 package repositories.impl;
 
+import enums.ExtraService;
 import enums.RoomStatus;
 import enums.RoomType;
 import models.Room;
@@ -7,7 +8,9 @@ import repositories.RoomRepository;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
+import java.util.Set;
 
 public class RoomRepositoryImpl implements RoomRepository {
 
@@ -19,12 +22,13 @@ public class RoomRepositoryImpl implements RoomRepository {
 
     @Override
     public Room save(Room room) {
-        String sql = "INSERT INTO rooms (number, room_type, room_status, price) VALUES (?, ?, ?, ?) RETURNING id";
+        String sql = "INSERT INTO rooms (number, room_type, room_status, price, extra_services) VALUES (?, ?, ?, ?, ?) RETURNING id";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, room.getNumber());
             ps.setString(2, room.getRoomType().name());
             ps.setString(3, room.getRoomStatus().name());
             ps.setDouble(4, room.getPrice());
+            ps.setString(5, room.getExtraServicesString());
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 room.setId(rs.getLong("id"));
@@ -159,6 +163,16 @@ public class RoomRepositoryImpl implements RoomRepository {
         room.setRoomStatus(RoomStatus.valueOf(rs.getString("room_status")));
         room.setPrice(rs.getDouble("price"));
         room.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
+
+        String extrasStr = rs.getString("extra_services");
+
+        Set<ExtraService> extras = EnumSet.noneOf(ExtraService.class);
+        if (extrasStr != null && !extrasStr.isBlank()) {
+            for (String s : extrasStr.split(",")) {
+                extras.add(ExtraService.valueOf(s.trim()));
+            }
+        }
+        room.setExtraServices(extras);
         return room;
     }
 }

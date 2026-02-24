@@ -39,12 +39,13 @@ public class RoomPanel extends JPanel {
                         "Статус",
                         "Цена",
                         "Дата создания",
+                        "Услуги",
                         "Действие"
                 }, 0
         ) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return column == 6;
+                return column == 7;
             }
         };
 
@@ -100,6 +101,8 @@ public class RoomPanel extends JPanel {
         table.getColumnModel().getColumn(0).setMinWidth(0);
         table.getColumnModel().getColumn(0).setMaxWidth(0);
         table.getColumnModel().getColumn(0).setWidth(0);
+        table.getColumn("Услуги").setPreferredWidth(250);
+        table.getColumn("Услуги").setMinWidth(200);
         table.setRowHeight(30);
     }
 
@@ -206,6 +209,7 @@ public class RoomPanel extends JPanel {
                     room.getRoomStatus(),
                     room.getPrice(),
                     formatDate(room.getCreatedAt()),
+                    room.getExtraServicesStringStr(),
                     ""
             });
         }

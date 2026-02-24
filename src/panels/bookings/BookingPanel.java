@@ -36,6 +36,7 @@ public class BookingPanel extends JPanel {
                         "Номер комнаты",
                         "Имя клиента",
                         "Номер клиента",
+                        "ID паспорта клиента",
                         "Дата бронирования",
                         "Конец даты бронирования",
                         "Статус",
@@ -45,7 +46,7 @@ public class BookingPanel extends JPanel {
         ) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return column == 9;
+                return column == 10;
             }
         };
 
@@ -119,6 +120,7 @@ public class BookingPanel extends JPanel {
                     booking.getRoomNumber(),
                     booking.getClientName(),
                     booking.getClientMsisdn(),
+                    booking.getClientPassportId(),
                     booking.getStartDate(),
                     booking.getEndDate(),
                     booking.getBookingStatus(),

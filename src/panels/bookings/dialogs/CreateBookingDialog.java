@@ -26,6 +26,7 @@ public class CreateBookingDialog extends JDialog {
 
     private JTextField clientNameField;
     private JTextField clientMsisdnField;
+    private JTextField clientPassportIdField;
 
     public CreateBookingDialog(Frame parent, BookingService bookingService, RoomService roomService) {
         super(parent, "Создание брони", true);
@@ -36,7 +37,7 @@ public class CreateBookingDialog extends JDialog {
         setLocationRelativeTo(parent);
         setLayout(new BorderLayout());
 
-        JPanel panel = new JPanel(new GridLayout(5, 2, 10, 10));
+        JPanel panel = new JPanel(new GridLayout(6, 2, 10, 10));
 
         buildFields();
         populatePanel(panel);
@@ -74,6 +75,7 @@ public class CreateBookingDialog extends JDialog {
 
         clientNameField = new JTextField();
         clientMsisdnField = new JTextField();
+        clientPassportIdField = new JTextField();
 
         startDateSpinner = buildDateSpinner(new Date());
         endDateSpinner = buildDateSpinner(new Date());
@@ -95,6 +97,9 @@ public class CreateBookingDialog extends JDialog {
 
         panel.add(new JLabel("Номер клиента"));
         panel.add(clientMsisdnField);
+
+        panel.add(new JLabel("ID паспорта клиента"));
+        panel.add(clientPassportIdField);
 
         panel.add(new JLabel("Дата начала"));
         panel.add(startDateSpinner);
@@ -142,6 +147,7 @@ public class CreateBookingDialog extends JDialog {
 
         String clientName = clientNameField.getText().trim();
         String clientMsisdn = clientMsisdnField.getText().trim();
+        String clientPassportId = clientPassportIdField.getText().trim();
 
         LocalDate start = toLocalDate((Date) startDateSpinner.getValue());
         LocalDate end = toLocalDate((Date) endDateSpinner.getValue());
@@ -152,6 +158,7 @@ public class CreateBookingDialog extends JDialog {
             booking.setRoomNumber(selectedRoom.getNumber());
             booking.setClientName(clientName);
             booking.setClientMsisdn(clientMsisdn);
+            booking.setClientPassportId(clientPassportId);
             booking.setStartDate(start);
             booking.setEndDate(end);
             booking.setBookingStatus(BookingStatus.ACTIVE);

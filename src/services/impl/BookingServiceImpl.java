@@ -44,6 +44,18 @@ public class BookingServiceImpl implements BookingService {
             booking.setBookingStatus(BookingStatus.ACTIVE);
         }
 
+        if (booking.getClientName() == null || booking.getClientName().isBlank()) {
+            throw new IllegalArgumentException("Имя клиента не может быть пустым!");
+        }
+
+        if (booking.getClientMsisdn() == null || booking.getClientMsisdn().isBlank()) {
+            throw new IllegalArgumentException("Номер клиента не может быть пустым!");
+        }
+
+        if (booking.getClientPassportId() == null || booking.getClientPassportId().isBlank()) {
+            throw new IllegalArgumentException("ID паспорта клиента не может быть пустым!");
+        }
+
         Booking saved = bookingRepository.save(booking);
 
         roomService.updateStatus(saved.getRoomId(), RoomStatus.OCCUPIED);

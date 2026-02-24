@@ -12,6 +12,7 @@ public class Booking {
     private String roomNumber;
     private String clientName;
     private String clientMsisdn;
+    private String clientPassportId;
     private LocalDate startDate;
     private LocalDate endDate;
     private BookingStatus bookingStatus;
@@ -25,6 +26,7 @@ public class Booking {
                    String roomNumber,
                    String clientName,
                    String clientMsisdn,
+                   String clientPassportId,
                    LocalDate startDate,
                    LocalDate endDate,
                    BookingStatus bookingStatus,
@@ -34,6 +36,7 @@ public class Booking {
         this.roomNumber = roomNumber;
         this.clientName = clientName;
         this.clientMsisdn = clientMsisdn;
+        this.clientPassportId = clientPassportId;
         this.startDate = startDate;
         this.endDate = endDate;
         this.bookingStatus = bookingStatus;
@@ -70,6 +73,14 @@ public class Booking {
 
     public void setClientMsisdn(String clientMsisdn) {
         this.clientMsisdn = clientMsisdn;
+    }
+
+    public String getClientPassportId() {
+        return clientPassportId;
+    }
+
+    public void setClientPassportId(String clientPassportId) {
+        this.clientPassportId = clientPassportId;
     }
 
     public LocalDate getStartDate() {

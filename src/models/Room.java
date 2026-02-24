@@ -1,9 +1,13 @@
 package models;
 
+import enums.ExtraService;
 import enums.RoomStatus;
 import enums.RoomType;
 
 import java.time.LocalDateTime;
+import java.util.EnumSet;
+import java.util.Objects;
+import java.util.Set;
 
 public class Room {
 
@@ -13,17 +17,28 @@ public class Room {
     private RoomStatus roomStatus;
     private Double price;
     private LocalDateTime createdAt;
+    private String extraServicesString;
+    private Set<ExtraService> extraServices = EnumSet.noneOf(ExtraService.class);
 
     public Room() {
     }
 
-    public Room(Long id, String number, RoomType roomType, RoomStatus roomStatus, Double price, LocalDateTime createdAt) {
+    public Room(Long id,
+                String number,
+                RoomType roomType,
+                RoomStatus roomStatus,
+                Double price,
+                LocalDateTime createdAt,
+                String extraServicesString,
+                Set<ExtraService> extraServices) {
         this.id = id;
         this.number = number;
         this.roomType = roomType;
         this.roomStatus = roomStatus;
         this.price = price;
         this.createdAt = createdAt;
+        this.extraServicesString = extraServicesString;
+        this.extraServices = extraServices;
     }
 
     public Long getId() {
@@ -72,5 +87,29 @@ public class Room {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public String getExtraServicesString() {
+        return extraServicesString;
+    }
+
+    public void setExtraServicesString(String extraServicesString) {
+        this.extraServicesString = extraServicesString;
+    }
+
+    public Set<ExtraService> getExtraServices() {
+        return extraServices;
+    }
+
+    public void setExtraServices(Set<ExtraService> extraServices) {
+        this.extraServices = extraServices;
+    }
+
+    public String getExtraServicesStringStr() {
+        if (extraServices == null || extraServices.isEmpty()) return "—";
+        return extraServices.stream()
+                .map(Objects::toString)
+                .sorted()
+                .collect(java.util.stream.Collectors.joining(", "));
     }
 }

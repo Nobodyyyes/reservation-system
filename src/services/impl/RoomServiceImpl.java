@@ -6,6 +6,7 @@ import repositories.RoomRepository;
 import services.RoomService;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class RoomServiceImpl implements RoomService {
 
@@ -26,12 +27,22 @@ public class RoomServiceImpl implements RoomService {
             throw new RuntimeException("Комната с номером [%s] уже существует".formatted(newRoom.getNumber()));
         }
 
+        String extrasServices = null;
+
+        if (newRoom.getExtraServices() != null && !newRoom.getExtraServices().isEmpty()) {
+            extrasServices = newRoom.getExtraServices()
+                    .stream()
+                    .map(Enum::name)
+                    .collect(Collectors.joining(","));
+        }
+
         Room room = new Room();
         room.setNumber(newRoom.getNumber());
         room.setRoomType(newRoom.getRoomType());
         room.setRoomStatus(newRoom.getRoomStatus());
         room.setPrice(newRoom.getPrice());
         room.setCreatedAt(newRoom.getCreatedAt());
+        room.setExtraServicesString(extrasServices);
 
         return roomRepository.save(room);
     }
